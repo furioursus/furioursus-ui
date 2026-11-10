@@ -36,7 +36,7 @@ furioursusTheme.get();            // "light" | "dark"
 furioursusTheme.set("dark");
 furioursusTheme.toggle();
 
-// Same as set(), for code that shouldn't reference the global (furioursus.dev's ThemeToggle):
+// Same as set(), for code that shouldn't reference the global:
 document.dispatchEvent(new CustomEvent("theme-change", { detail: { theme: "dark" } }));
 
 // Fires on every change, including OS switches and other tabs. Update toggle icons here:
@@ -45,6 +45,24 @@ document.addEventListener("theme-changed", (e) => e.detail.theme);
 
 It also re-applies the theme when the page comes back from the back/forward cache, and when another
 tab changes it.
+
+## Toggle buttons
+
+Mark any button `data-theme-toggle` and `theme.js` does the rest, with no other script:
+
+```html
+<button type="button" role="switch" data-theme-toggle><span class="sr-only">Dark theme</span>…</button>
+<button type="button" data-theme-toggle>◐</button>
+```
+
+- A click anywhere inside it switches theme, saving the choice by the rule above.
+- On every change, and once on `DOMContentLoaded`, each toggle's `title` becomes "Switch to light/dark
+  mode". A `role="switch"` also gets `aria-checked` (true in dark). Any other toggle gets the same
+  text as its `aria-label`, so it names the action.
+- **Footgun:** `theme.js` is the only click handler. A toggle that also handles its own click (calls
+  `toggle()` or dispatches `theme-change`) switches twice and appears to do nothing.
+- The shared `ThemeToggle` component is this: a `role="switch"` with `data-theme-toggle`. It works
+  rendered as static HTML, so a site doesn't have to ship Vue to the browser for it.
 
 ## The cross-fade
 

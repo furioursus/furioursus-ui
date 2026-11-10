@@ -29,12 +29,15 @@ directive:
 ---
 import { PeriodTabs, RankedList, ThemeToggle } from "@furioursus/ui/vue";
 ---
-<ThemeToggle client:load />
-<RankedList title="Top Albums" items={albums} newTab />   <!-- no JS needed -->
+<ThemeToggle />                                            <!-- theme.js handles it; no JS shipped -->
+<RankedList title="Top Albums" items={albums} newTab />   <!-- static -->
 ```
 
-- **Footgun:** without `client:*`, `ThemeToggle` and `PeriodTabs` render but do nothing when
-  clicked. `RankedList` is static and doesn't need one.
+- `ThemeToggle` and `RankedList` need no `client:` directive. Leave it off: hydrating either ships
+  the Vue runtime (about 30 KB gzipped) for nothing.
+- **Footgun:** `PeriodTabs` does need one (`client:visible` is usually right), or it renders but
+  doesn't respond. Hydrate only the tabs and let them show and hide server-rendered panels by id, as
+  furioursus.dev's `ListeningStatsTabs.vue` does, rather than hydrating the panels' contents too.
 - **Footgun:** `v-model` doesn't cross the Astro/Vue boundary. Wrap `PeriodTabs` and the panels it
   switches in one Vue component, and hydrate that.
 
@@ -56,8 +59,11 @@ Import and register as usual. Nothing else to set up.
 
 ## ThemeToggle
 
-A switch (`role="switch"`, `aria-checked`) that dispatches `theme-change` for `theme.js` to apply,
-and follows `theme-changed`. It never sets `data-theme` itself.
+A switch (`role="switch"`, `aria-checked`) marked `data-theme-toggle`. `theme.js` handles its click
+and keeps `aria-checked` and `title` in sync (see [theming.md](theming.md#toggle-buttons)), so it works
+as static HTML. Hydrated, it follows `theme-changed` so Vue's render agrees.
+
+- **Footgun:** don't give it a click handler; `theme.js` would switch twice.
 
 | Prop | Default | |
 | --- | --- | --- |
@@ -102,6 +108,9 @@ A numbered top-N list: rank, name with an optional subtitle, and a count.
 - **Footgun:** the root has `min-width: 0`. Without it, a list in a grid column grows to its longest
   name and pushes the other columns uneven.
 - Items without a `url` render as plain text, not dead links.
+- **Footgun:** counts use `toLocaleString()`, which differs between the server (Node's locale) and
+  a reader's browser. Render it statically, or Vue reports a hydration mismatch for readers whose
+  locale formats numbers differently.
 
 ## Adding a component
 
