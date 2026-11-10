@@ -6,16 +6,12 @@ defineProps({
 	label: { type: String, default: "Dark theme" },
 });
 
-// Server render and first client render both start unchecked; the real state arrives on mount, so
-// hydration never mismatches. The icons swap from CSS on :root[data-theme], so they're right at first paint.
+// theme.js handles the click (via data-theme-toggle) and keeps aria-checked and title in sync, so this works
+// rendered statically with no hydration. FOOTGUN: don't add a click handler here; theme.js would flip twice.
+// Hydrated, it follows theme-changed so Vue's own render agrees with what theme.js set.
 const dark = ref(false);
 const sync = () => {
 	dark.value = document.documentElement.getAttribute("data-theme") === "dark";
-};
-const toggle = () => {
-	document.dispatchEvent(
-		new CustomEvent("theme-change", { detail: { theme: dark.value ? "light" : "dark" } }),
-	);
 };
 
 onMounted(() => {
@@ -29,10 +25,10 @@ onBeforeUnmount(() => document.removeEventListener("theme-changed", sync));
 	<button
 		type="button"
 		role="switch"
+		data-theme-toggle
 		:aria-checked="dark"
 		class="fu-theme-toggle"
 		:title="dark ? 'Switch to light mode' : 'Switch to dark mode'"
-		@click="toggle"
 	>
 		<span class="fu-sr-only">{{ label }}</span>
 		<svg
