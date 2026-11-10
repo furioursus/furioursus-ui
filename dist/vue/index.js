@@ -181,9 +181,6 @@ label: {
 		const sync = () => {
 			dark.value = document.documentElement.getAttribute("data-theme") === "dark";
 		};
-		const toggle = () => {
-			document.dispatchEvent(new CustomEvent("theme-change", { detail: { theme: dark.value ? "light" : "dark" } }));
-		};
 		onMounted(() => {
 			sync();
 			document.addEventListener("theme-changed", sync);
@@ -193,10 +190,10 @@ label: {
 			return openBlock(), createElementBlock("button", {
 				type: "button",
 				role: "switch",
+				"data-theme-toggle": "",
 				"aria-checked": dark.value,
 				class: "fu-theme-toggle",
-				title: dark.value ? "Switch to light mode" : "Switch to dark mode",
-				onClick: toggle
+				title: dark.value ? "Switch to light mode" : "Switch to dark mode"
 			}, [createElementVNode("span", _hoisted_2, toDisplayString(__props.label), 1), _cache[0] || (_cache[0] = createStaticVNode("<svg class=\"fu-theme-toggle__icon fu-theme-toggle__sun\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z\"></path><path d=\"M22 12L23 12M12 2V1M12 23V22M20 20L19 19M20 4L19 5M4 20L5 19M4 4L5 5M1 12L2 12\"></path></svg><svg class=\"fu-theme-toggle__icon fu-theme-toggle__moon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z\"></path><path d=\"M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2\"></path><path d=\"M19 11h2m-1 -1v2\"></path></svg>", 2))], 8, _hoisted_1);
 		};
 	}
