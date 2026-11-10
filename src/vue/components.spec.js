@@ -46,16 +46,12 @@ describe("ThemeToggle", () => {
 		wrapper.unmount();
 	});
 
-	it("asks theme.js for the other theme instead of setting data-theme itself", async () => {
+	it("has no click handler of its own (theme.js owns the click)", async () => {
 		root.setAttribute("data-theme", "light");
 		const wrapper = mount(ThemeToggle);
-		const asked = [];
-		const listen = (e) => asked.push(e.detail.theme);
-		document.addEventListener("theme-change", listen);
 		await wrapper.get("button").trigger("click");
-		document.removeEventListener("theme-change", listen);
-		expect(asked).toEqual(["dark"]);
 		expect(root.getAttribute("data-theme")).toBe("light");
+		expect(wrapper.get("button").attributes()).toHaveProperty("data-theme-toggle");
 		wrapper.unmount();
 	});
 
