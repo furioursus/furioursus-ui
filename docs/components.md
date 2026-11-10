@@ -1,0 +1,115 @@
+# Components
+
+Vue 3 components shared across furioursus sites. Source in `src/vue/`, built by Vite into
+`dist/vue/index.js` (Vue left as an import) and `dist/vue/style.css`. `demo/components.html` shows
+every component from the built files.
+
+## Using them
+
+They need the tokens and the theme switcher, then the component styles:
+
+```js
+import "@furioursus/ui/tokens.css";      // or tailwind.css on a Tailwind site
+import "@furioursus/ui/vue/style.css";
+import { PeriodTabs, RankedList, ThemeToggle } from "@furioursus/ui/vue";
+```
+
+`theme.js` must still load in `<head>` (see [theming.md](theming.md)).
+
+Vue is a peer dependency, marked optional so token-only consumers don't get it installed. A site
+using the components installs `vue` itself.
+
+### In Astro
+
+Add the integration (`npx astro add vue`), then use the components in `.astro` files. Astro renders
+them to HTML on the server; only components that need to react to clicks need a `client:`
+directive:
+
+```astro
+---
+import { PeriodTabs, RankedList, ThemeToggle } from "@furioursus/ui/vue";
+---
+<ThemeToggle client:load />
+<RankedList title="Top Albums" items={albums} newTab />   <!-- no JS needed -->
+```
+
+- **Footgun:** without `client:*`, `ThemeToggle` and `PeriodTabs` render but do nothing when
+  clicked. `RankedList` is static and doesn't need one.
+- **Footgun:** `v-model` doesn't cross the Astro/Vue boundary. Wrap `PeriodTabs` and the panels it
+  switches in one Vue component, and hydrate that.
+
+### In a plain Vite + Vue app
+
+Import and register as usual. Nothing else to set up.
+
+## Styling rules
+
+- All component CSS is inside `@layer components`. A site's own unlayered CSS, or its Tailwind
+  utilities (in the later `utilities` layer), override it without `!important`. On a site that
+  doesn't declare layers, any unlayered rule wins.
+- Classes are prefixed `fu-` and named block/element (`fu-tabs__tab`), so they don't collide with a
+  site's own.
+- Components read only tokens (`var(--color-accent)` and so on) and never set colours of their own.
+- One look per component. When projects disagreed, the look was chosen once (2026-11-10) and the
+  other removed: ThemeToggle uses furioursus.dev's sun/moon, PeriodTabs the tracker's underlined
+  segments. Don't reintroduce a `look`/`variant` prop to bring the other back; change the one look.
+
+## ThemeToggle
+
+A switch (`role="switch"`, `aria-checked`) that dispatches `theme-change` for `theme.js` to apply,
+and follows `theme-changed`. It never sets `data-theme` itself.
+
+| Prop | Default | |
+| --- | --- | --- |
+| `label` | `"Dark theme"` | Accessible name, read with the on/off state. |
+
+- It renders unchecked on the server and in the first client render, then reads the real theme on
+  mount, so hydration never mismatches. The sun/moon swap is CSS on `:root[data-theme]`, so the icon
+  is right at first paint anyway.
+- 36px hit area, 28px icons, pink on hover, 2px pink focus ring.
+
+## PeriodTabs
+
+The ARIA tabs pattern: arrow keys move and select (wrapping), Home and End jump to the ends, and only
+the selected tab is in the Tab order.
+
+| Prop | Default | |
+| --- | --- | --- |
+| `options` | required | `[{ value, label }]`, in order. |
+| `modelValue` | first option | The selected `value`. Use `v-model`. |
+| `label` | required | Accessible name of the tab list, e.g. "Time range". |
+| `idPrefix` | none | Links tabs to panels: tab `${idPrefix}-tab-${value}` controls `${idPrefix}-panel-${value}`. |
+
+- When the tabs switch panels, pass `idPrefix`, give each panel `id="${idPrefix}-panel-${value}"`,
+  `role="tabpanel"` and `aria-labelledby="${idPrefix}-tab-${value}"`, and hide the others.
+- When they only filter one view (a chart's date range), leave `idPrefix` off.
+- Look: muted text, a 1px underline on hover, bold pink with a 2px pink underline when selected.
+
+## RankedList
+
+A numbered top-N list: rank, name with an optional subtitle, and a count.
+
+| Prop | Default | |
+| --- | --- | --- |
+| `title` | required | The heading above the list. |
+| `headingLevel` | `3` | 2–6. |
+| `items` | required | `[{ name, subtitle?, count, url? }]` in rank order. `count` is formatted with the reader's locale. |
+| `emptyText` | `"Nothing here yet."` | Shown instead of an empty list. |
+| `newTab` | `false` | Open item links in a new tab. |
+
+- Rows reserve two lines (name and subtitle) whether or not they have a subtitle, so lists side by
+  side line up row for row.
+- **Footgun:** the root has `min-width: 0`. Without it, a list in a grid column grows to its longest
+  name and pushes the other columns uneven.
+- Items without a `url` render as plain text, not dead links.
+
+## Adding a component
+
+1. Only when at least two projects need it. Read every project's current version first.
+2. If their looks differ, build both behind a temporary `look` prop, show them side by side in
+   `demo/components.html`, and let christopher pick. Then delete the prop and the losing CSS before
+   release.
+3. Write `src/vue/<Name>.vue` with JSDoc on every prop, styles in `@layer components` with `fu-`
+   classes and token values only. Export it from `src/vue/index.js`.
+4. Add behaviour and server-render tests to `src/vue/components.spec.js`.
+5. Document it here, `npm run build`, `npm test`, and check it in `demo/components.html`.
