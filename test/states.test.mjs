@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { root } from "../scripts/build.mjs";
 
 // Every state must change shape as well as colour (christopher has protanopia): docs/components.md.
-const STATE = /:hover|:active|:disabled|\[aria-(?:selected|pressed)="true"\]/;
+const STATE = /:hover|:active|:disabled|\[aria-(?:selected|pressed|disabled)="true"\]/;
 const COLOUR_ONLY = new Set([
 	"color",
 	"background-color",

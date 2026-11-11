@@ -30,7 +30,7 @@
 	<div id="app"></div>
 	<script type="module">
 		import { createApp, h, ref } from "vue";
-		import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "../dist/vue/index.js";
+		import { Pager, PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "../dist/vue/index.js";
 
 		const periods = [
 			{ value: "7day", label: "Last 7 days" },
@@ -58,6 +58,7 @@
 				const b = ref("1m");
 				const c = ref("all");
 				const d = ref("price");
+				const p = ref(2);
 				const filters = [{ value: "all", label: "All", count: 93 }, { value: "decide", label: "To decide", count: 4 },
 					{ value: "sell", label: "Selling", count: 71 }, { value: "hold", label: "Holding", count: 0, disabled: true }];
 				const modes = [{ value: "total", label: "Total value" }, { value: "price", label: "Price moves only" }];
@@ -89,6 +90,13 @@
 						cell("Chart line",
 							h(SegmentedControl, { options: modes, label: "Line", modelValue: d.value, "onUpdate:modelValue": (v) => (d.value = v) }),
 							h("p", { class: "panel" }, `Showing ${d.value}`)),
+					]),
+
+					h("h2", "Pager"),
+					h("p", { class: "note" }, "Buttons that emit the page, or links when given hrefs. The second is the links mode on page 1, so Previous is left out."),
+					h("div", { class: "compare" }, [
+						cell("Buttons", h(Pager, { page: p.value, pages: 5, "onUpdate:page": (v) => (p.value = v) })),
+						cell("Links", h(Pager, { page: 1, pages: 14, nextHref: "#" })),
 					]),
 
 					h("h2", "RankedList"),

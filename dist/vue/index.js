@@ -1,4 +1,116 @@
 import { Fragment, computed, createBlock, createCommentVNode, createElementBlock, createElementVNode, createStaticVNode, createTextVNode, mergeProps, onBeforeUnmount, onMounted, openBlock, ref, renderList, resolveDynamicComponent, toDisplayString, withCtx } from "vue";
+// src/vue/Pager.vue
+var _hoisted_1$4 = ["aria-label"];
+var _hoisted_2$4 = ["href"];
+var _hoisted_3$2 = { class: "fu-pager__label" };
+var _hoisted_4$1 = ["href"];
+var _hoisted_5$1 = ["aria-label"];
+var _hoisted_6$1 = ["aria-disabled"];
+var _hoisted_7$1 = { class: "fu-pager__label" };
+var _hoisted_8 = ["aria-disabled"];
+var _sfc_main = {
+	__name: "Pager",
+	props: {
+		/** Current page, 1-based (Astro's `page.currentPage`). */
+		page: {
+			type: Number,
+			required: true
+		},
+		/** Number of pages (Astro's `page.lastPage`). Nothing renders when it's 1 or less. */
+		pages: {
+			type: Number,
+			required: true
+		},
+		/** Link to the previous page. Passing either href renders links instead of buttons. */
+		prevHref: {
+			type: String,
+			default: void 0
+		},
+		/** Link to the next page. */
+		nextHref: {
+			type: String,
+			default: void 0
+		},
+		/** Visible text of the previous step; the arrow is added and hidden from screen readers. */
+		prevText: {
+			type: String,
+			default: "Previous"
+		},
+		/** Visible text of the next step. */
+		nextText: {
+			type: String,
+			default: "Next"
+		},
+		/** Accessible name of the nav or group. */
+		label: {
+			type: String,
+			default: "Pages"
+		}
+	},
+	emits: ["update:page"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const links = computed(() => props.prevHref != null || props.nextHref != null);
+		const atStart = computed(() => props.page <= 1);
+		const atEnd = computed(() => props.page >= props.pages);
+		function go(to, blocked) {
+			if (!blocked) emit("update:page", to);
+		}
+		return (_ctx, _cache) => {
+			return __props.pages > 1 && links.value ? (openBlock(), createElementBlock("nav", {
+				key: 0,
+				class: "fu-pager",
+				"aria-label": __props.label
+			}, [
+				__props.prevHref ? (openBlock(), createElementBlock("a", {
+					key: 0,
+					class: "fu-pager__step fu-pager__step--prev",
+					href: __props.prevHref,
+					rel: "prev"
+				}, [_cache[2] || (_cache[2] = createElementVNode("span", {
+					class: "fu-pager__arrow",
+					"aria-hidden": "true"
+				}, "←", -1)), createTextVNode(" " + toDisplayString(__props.prevText), 1)], 8, _hoisted_2$4)) : createCommentVNode("", true),
+				createElementVNode("span", _hoisted_3$2, "Page " + toDisplayString(__props.page) + " of " + toDisplayString(__props.pages), 1),
+				__props.nextHref ? (openBlock(), createElementBlock("a", {
+					key: 1,
+					class: "fu-pager__step fu-pager__step--next",
+					href: __props.nextHref,
+					rel: "next"
+				}, [createTextVNode(toDisplayString(__props.nextText) + " ", 1), _cache[3] || (_cache[3] = createElementVNode("span", {
+					class: "fu-pager__arrow",
+					"aria-hidden": "true"
+				}, "→", -1))], 8, _hoisted_4$1)) : createCommentVNode("", true)
+			], 8, _hoisted_1$4)) : __props.pages > 1 ? (openBlock(), createElementBlock("div", {
+				key: 1,
+				class: "fu-pager",
+				role: "group",
+				"aria-label": __props.label
+			}, [
+				createElementVNode("button", {
+					type: "button",
+					class: "fu-pager__step fu-pager__step--prev",
+					"aria-disabled": atStart.value ? "true" : void 0,
+					onClick: _cache[0] || (_cache[0] = ($event) => go(__props.page - 1, atStart.value))
+				}, [_cache[4] || (_cache[4] = createElementVNode("span", {
+					class: "fu-pager__arrow",
+					"aria-hidden": "true"
+				}, "←", -1)), createTextVNode(" " + toDisplayString(__props.prevText), 1)], 8, _hoisted_6$1),
+				createElementVNode("span", _hoisted_7$1, "Page " + toDisplayString(__props.page) + " of " + toDisplayString(__props.pages), 1),
+				createElementVNode("button", {
+					type: "button",
+					class: "fu-pager__step fu-pager__step--next",
+					"aria-disabled": atEnd.value ? "true" : void 0,
+					onClick: _cache[1] || (_cache[1] = ($event) => go(__props.page + 1, atEnd.value))
+				}, [createTextVNode(toDisplayString(__props.nextText) + " ", 1), _cache[5] || (_cache[5] = createElementVNode("span", {
+					class: "fu-pager__arrow",
+					"aria-hidden": "true"
+				}, "→", -1))], 8, _hoisted_8)
+			], 8, _hoisted_5$1)) : createCommentVNode("", true);
+		};
+	}
+};
 // src/vue/PeriodTabs.vue
 var _hoisted_1$3 = ["aria-label"];
 var _hoisted_2$3 = [
@@ -9,7 +121,7 @@ var _hoisted_2$3 = [
 	"onClick",
 	"onKeydown"
 ];
-var _sfc_main = {
+var _sfc_main$1 = {
 	__name: "PeriodTabs",
 	props: {
 		/** The choices, in order: `{ value, label }`. */
@@ -105,7 +217,7 @@ var _hoisted_6 = {
 	class: "fu-ranked__subtitle"
 };
 var _hoisted_7 = { class: "fu-ranked__count" };
-var _sfc_main$1 = {
+var _sfc_main$2 = {
 	__name: "RankedList",
 	props: {
 		/** Heading above the list, e.g. "Top Albums". */
@@ -174,7 +286,7 @@ var _hoisted_2$1 = [
 	"onClick"
 ];
 var _hoisted_3 = { class: "fu-seg__count" };
-var _sfc_main$2 = {
+var _sfc_main$3 = {
 	__name: "SegmentedControl",
 	props: {
 		/**
@@ -225,7 +337,7 @@ var _sfc_main$2 = {
 // src/vue/ThemeToggle.vue
 var _hoisted_1 = ["aria-checked", "title"];
 var _hoisted_2 = { class: "fu-sr-only" };
-var _sfc_main$3 = {
+var _sfc_main$4 = {
 	__name: "ThemeToggle",
 	props: { 
 	/** Accessible name of the switch, read with its on/off state. */
@@ -255,4 +367,4 @@ label: {
 		};
 	}
 };
-export { _sfc_main as PeriodTabs, _sfc_main$1 as RankedList, _sfc_main$2 as SegmentedControl, _sfc_main$3 as ThemeToggle };
+export { _sfc_main as Pager, _sfc_main$1 as PeriodTabs, _sfc_main$2 as RankedList, _sfc_main$3 as SegmentedControl, _sfc_main$4 as ThemeToggle };
