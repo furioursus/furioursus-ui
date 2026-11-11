@@ -31,3 +31,10 @@ The stale-file test doesn't cover `dist/vue/`, so always rebuild before committi
 furioursus.dev (Astro + Tailwind v4), mtg-csv-sorter and mtg-library-value-tracker (static, no
 build). Anything in `dist/` except `dist/vue/` must keep working from a plain `<link>`/`<script>`
 with no bundler.
+
+## Commits
+
+Every commit is christopher's: author and committer `Christopher Kennedy-Nuñez <yo@git.furioursus.dev>`, never `yo@github.furioursus.dev` or a Claude address.
+
+- No AI attribution: no `Co-Authored-By`, "Generated with" or session links. `.claude/settings.json` turns Claude Code's off, including in cloud sessions.
+- Conventional Commits with a lowercase imperative subject. Add a body only when the why isn't obvious: one line per paragraph or bullet, never hard-wrapped, American spelling.
