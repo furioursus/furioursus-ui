@@ -53,11 +53,17 @@ Import and register as usual. Nothing else to set up.
 - Classes are prefixed `fu-` and named block/element (`fu-tabs__tab`), so they don't collide with a
   site's own.
 - Components read only tokens (`var(--color-accent)` and so on) and never set colours of their own.
-- One look per component. When projects disagreed, the look was chosen once (2026-11-10) and the
-  other removed: ThemeToggle uses furioursus.dev's sun/moon, PeriodTabs the tracker's underlined
-  segments. Don't reintroduce a `look`/`variant` prop to bring the other back; change the one look.
-  SegmentedControl shares PeriodTabs' look (`src/vue/segments.css`), chosen over Go-Shintai's
-  bordered filter strip (2026-11-11); its per-row sell/hold/bulk/keep toggle stays in the tracker.
+- **Every state changes shape as well as colour**, because christopher has protanopia. Hover, press,
+  selected, focus and disabled each need a cue that isn't colour: an underline, inset bar, offset
+  shadow, outline, nudge, weight or opacity. The segments show the pattern: a 1px underline on hover,
+  a 1px nudge on press, bold with a 2px underline when selected, a 2px pink focus ring, 45% when
+  disabled. The full state table the sites follow is in mtg-library-value-tracker's
+  `docs/design.md` ("Interaction states").
+- `test/states.test.mjs` fails when a `:hover`, `:active`, `:disabled` or selected/pressed state in
+  `dist/vue/style.css` changes only colour properties. The components so far are borderless, after
+  furioursus.dev's design system (no boxes, shadows or lifts), so they use an underline, a thicker
+  stroke, a 1px nudge, bolder weight or an outline. The pink offset shadow belongs to the tracker's
+  and sorter's boxed buttons.
 
 ## ThemeToggle
 
@@ -74,7 +80,8 @@ as static HTML. Hydrated, it follows `theme-changed` so Vue's render agrees.
 - It renders unchecked on the server and in the first client render, then reads the real theme on
   mount, so hydration never mismatches. The sun/moon swap is CSS on `:root[data-theme]`, so the icon
   is right at first paint anyway.
-- 36px hit area, 28px icons, pink on hover, 2px pink focus ring.
+- 36px hit area, 28px icons. Hover turns it pink and thickens the strokes from 1.5 to 2; press
+  nudges it down 1px. 2px pink focus ring.
 
 ## PeriodTabs
 
@@ -132,6 +139,8 @@ A numbered top-N list: rank, name with an optional subtitle, and a count.
 - **Footgun:** the root has `min-width: 0`. Without it, a list in a grid column grows to its longest
   name and pushes the other columns uneven.
 - Items without a `url` render as plain text, not dead links.
+- Look: a linked row's name turns pink with a 2px underline on hover, and the row nudges down 1px
+  on press. 2px pink focus ring.
 - **Footgun:** counts use `toLocaleString()`, which differs between the server (Node's locale) and
   a reader's browser. Render it statically, or Vue reports a hydration mismatch for readers whose
   locale formats numbers differently.
