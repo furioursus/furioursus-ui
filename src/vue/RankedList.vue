@@ -111,6 +111,11 @@ defineProps({
 	}
 	a.fu-ranked__item:hover .fu-ranked__name {
 		color: var(--color-accent);
+		text-decoration: underline 2px;
+		text-underline-offset: 0.15em;
+	}
+	a.fu-ranked__item:active {
+		transform: translateY(1px);
 	}
 	a.fu-ranked__item:focus-visible {
 		outline: 2px solid var(--color-accent);
