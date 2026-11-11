@@ -53,11 +53,19 @@ Import and register as usual. Nothing else to set up.
 - Classes are prefixed `fu-` and named block/element (`fu-tabs__tab`), so they don't collide with a
   site's own.
 - Components read only tokens (`var(--color-accent)` and so on) and never set colours of their own.
+- **Every state changes shape as well as colour**, because christopher has protanopia. Hover, press,
+  selected, focus and disabled each need a cue that isn't colour: an underline, inset bar, offset
+  shadow, outline, nudge, weight or opacity. The segments show the pattern: a 1px underline on hover,
+  a 1px nudge on press, bold with a 2px underline when selected, a 2px pink focus ring, 45% when
+  disabled. The full state table the sites follow is in mtg-library-value-tracker's
+  `docs/design.md` ("Interaction states").
+- **Footgun, known gaps:** `ThemeToggle`'s hover and `RankedList`'s link hover only turn pink, and
+  neither has a press state. Don't copy their state CSS into a new component; fix them instead.
 - One look per component. When projects disagreed, the look was chosen once (2026-11-10) and the
   other removed: ThemeToggle uses furioursus.dev's sun/moon, PeriodTabs the tracker's underlined
   segments. Don't reintroduce a `look`/`variant` prop to bring the other back; change the one look.
   SegmentedControl shares PeriodTabs' look (`src/vue/segments.css`), chosen over Go-Shintai's
-  bordered filter strip (2026-11-11); its per-row sell/hold/bulk/keep toggle stays in the tracker.
+  bordered filter strip (2026-11-10); its per-row sell/hold/bulk/keep toggle stays in the tracker.
 
 ## ThemeToggle
 
