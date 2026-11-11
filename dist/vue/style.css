@@ -135,6 +135,11 @@
 }
 a.fu-ranked__item:hover .fu-ranked__name {
 		color: var(--color-accent);
+		text-decoration: underline 2px;
+		text-underline-offset: 0.15em;
+}
+a.fu-ranked__item:active {
+		transform: translateY(1px);
 }
 a.fu-ranked__item:focus-visible {
 		outline: 2px solid var(--color-accent);
@@ -168,10 +173,19 @@ a.fu-ranked__item:focus-visible {
 		height: 2.25rem;
 		padding: 0.5rem;
 		border: 0;
-		transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+		transition:
+			color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+			transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+	/* Hover thickens the strokes as well as turning pink: a state is never colour alone (docs/components.md). */
 .fu-theme-toggle:hover {
 		color: var(--color-accent);
+}
+.fu-theme-toggle:hover .fu-theme-toggle__icon {
+		stroke-width: 2;
+}
+.fu-theme-toggle:active {
+		transform: translateY(1px);
 }
 .fu-theme-toggle:focus-visible {
 		outline: 2px solid var(--color-accent);
@@ -186,7 +200,8 @@ a.fu-ranked__item:focus-visible {
 		translate: -50% -50%;
 		transition:
 			scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
-			opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+			opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
+			stroke-width 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .fu-theme-toggle__moon,
 	:root[data-theme="dark"] .fu-theme-toggle__sun {
