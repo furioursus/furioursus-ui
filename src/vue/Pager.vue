@@ -30,14 +30,14 @@ function go(to, blocked) {
 
 <template>
 	<nav v-if="pages > 1 && links" class="fu-pager" :aria-label="label">
-		<a v-if="prevHref" class="fu-pager__step fu-pager__step--prev" :href="prevHref" rel="prev"><span class="fu-pager__arrow" aria-hidden="true">←</span> {{ prevText }}</a>
+		<a v-if="prevHref" class="fu-pager__step fu-pager__step--prev" :href="prevHref" rel="prev"><span class="fu-pager__arrow" aria-hidden="true">←</span>{{ prevText }}</a>
 		<span class="fu-pager__label">Page {{ page }} of {{ pages }}</span>
-		<a v-if="nextHref" class="fu-pager__step fu-pager__step--next" :href="nextHref" rel="next">{{ nextText }} <span class="fu-pager__arrow" aria-hidden="true">→</span></a>
+		<a v-if="nextHref" class="fu-pager__step fu-pager__step--next" :href="nextHref" rel="next">{{ nextText }}<span class="fu-pager__arrow" aria-hidden="true">→</span></a>
 	</nav>
 	<div v-else-if="pages > 1" class="fu-pager" role="group" :aria-label="label">
-		<button type="button" class="fu-pager__step fu-pager__step--prev" :aria-disabled="atStart ? 'true' : undefined" @click="go(page - 1, atStart)"><span class="fu-pager__arrow" aria-hidden="true">←</span> {{ prevText }}</button>
+		<button type="button" class="fu-pager__step fu-pager__step--prev" :aria-disabled="atStart ? 'true' : undefined" @click="go(page - 1, atStart)"><span class="fu-pager__arrow" aria-hidden="true">←</span>{{ prevText }}</button>
 		<span class="fu-pager__label">Page {{ page }} of {{ pages }}</span>
-		<button type="button" class="fu-pager__step fu-pager__step--next" :aria-disabled="atEnd ? 'true' : undefined" @click="go(page + 1, atEnd)">{{ nextText }} <span class="fu-pager__arrow" aria-hidden="true">→</span></button>
+		<button type="button" class="fu-pager__step fu-pager__step--next" :aria-disabled="atEnd ? 'true' : undefined" @click="go(page + 1, atEnd)">{{ nextText }}<span class="fu-pager__arrow" aria-hidden="true">→</span></button>
 	</div>
 </template>
 
@@ -82,10 +82,17 @@ function go(to, blocked) {
 		grid-column: 3;
 		justify-self: end;
 	}
-	/* inline-block keeps the underline off the arrow, so the arrow can move on its own. */
+	/* inline-block keeps the underline off the arrow, so the arrow can move on its own.
+	   FOOTGUN: space it with a margin, not a space character, or the hover underline runs under the gap. */
 	.fu-pager__arrow {
 		display: inline-block;
 		transition: transform var(--duration-ui) ease-out;
+	}
+	.fu-pager__step--prev .fu-pager__arrow {
+		margin-inline-end: 0.4em;
+	}
+	.fu-pager__step--next .fu-pager__arrow {
+		margin-inline-start: 0.4em;
 	}
 	.fu-pager__step:focus-visible {
 		outline: 2px solid var(--color-accent);

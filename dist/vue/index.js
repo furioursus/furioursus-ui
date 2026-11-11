@@ -71,14 +71,14 @@ var _sfc_main = {
 				}, [_cache[2] || (_cache[2] = createElementVNode("span", {
 					class: "fu-pager__arrow",
 					"aria-hidden": "true"
-				}, "←", -1)), createTextVNode(" " + toDisplayString(__props.prevText), 1)], 8, _hoisted_2$4)) : createCommentVNode("", true),
+				}, "←", -1)), createTextVNode(toDisplayString(__props.prevText), 1)], 8, _hoisted_2$4)) : createCommentVNode("", true),
 				createElementVNode("span", _hoisted_3$2, "Page " + toDisplayString(__props.page) + " of " + toDisplayString(__props.pages), 1),
 				__props.nextHref ? (openBlock(), createElementBlock("a", {
 					key: 1,
 					class: "fu-pager__step fu-pager__step--next",
 					href: __props.nextHref,
 					rel: "next"
-				}, [createTextVNode(toDisplayString(__props.nextText) + " ", 1), _cache[3] || (_cache[3] = createElementVNode("span", {
+				}, [createTextVNode(toDisplayString(__props.nextText), 1), _cache[3] || (_cache[3] = createElementVNode("span", {
 					class: "fu-pager__arrow",
 					"aria-hidden": "true"
 				}, "→", -1))], 8, _hoisted_4$1)) : createCommentVNode("", true)
@@ -96,14 +96,14 @@ var _sfc_main = {
 				}, [_cache[4] || (_cache[4] = createElementVNode("span", {
 					class: "fu-pager__arrow",
 					"aria-hidden": "true"
-				}, "←", -1)), createTextVNode(" " + toDisplayString(__props.prevText), 1)], 8, _hoisted_6$1),
+				}, "←", -1)), createTextVNode(toDisplayString(__props.prevText), 1)], 8, _hoisted_6$1),
 				createElementVNode("span", _hoisted_7$1, "Page " + toDisplayString(__props.page) + " of " + toDisplayString(__props.pages), 1),
 				createElementVNode("button", {
 					type: "button",
 					class: "fu-pager__step fu-pager__step--next",
 					"aria-disabled": atEnd.value ? "true" : void 0,
 					onClick: _cache[1] || (_cache[1] = ($event) => go(__props.page + 1, atEnd.value))
-				}, [createTextVNode(toDisplayString(__props.nextText) + " ", 1), _cache[5] || (_cache[5] = createElementVNode("span", {
+				}, [createTextVNode(toDisplayString(__props.nextText), 1), _cache[5] || (_cache[5] = createElementVNode("span", {
 					class: "fu-pager__arrow",
 					"aria-hidden": "true"
 				}, "→", -1))], 8, _hoisted_8)
