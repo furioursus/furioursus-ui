@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { createSSRApp, h } from "vue";
 import { renderToString } from "vue/server-renderer";
-import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "./index.js";
+import { Pager, PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "./index.js";
 
 const root = document.documentElement;
 afterEach(() => root.removeAttribute("data-theme"));
@@ -21,6 +21,7 @@ describe("server rendering", () => {
 				h(PeriodTabs, { options: OPTIONS, label: "Range" }),
 				h(SegmentedControl, { options: OPTIONS, label: "Show", modelValue: "1month" }),
 				h(RankedList, { title: "Top", items: [{ name: "Blue Lines", count: 1204 }] }),
+				h(Pager, { page: 2, pages: 3, prevHref: "/blog/", nextHref: "/blog/3/" }),
 			],
 		});
 		const html = await renderToString(app);
@@ -30,6 +31,7 @@ describe("server rendering", () => {
 		expect(html).toContain('role="group" aria-label="Show"');
 		expect(html).toContain('aria-pressed="true"');
 		expect(html).toContain("Blue Lines");
+		expect(html).toContain('<nav class="fu-pager" aria-label="Pages">');
 	});
 });
 
@@ -183,5 +185,47 @@ describe("RankedList", () => {
 		expect(wrapper.find("ol").exists()).toBe(false);
 		expect(wrapper.get("p").text()).toBe("Nothing scrobbled in this range yet.");
 		expect(wrapper.get("h2").text()).toBe("Top Tracks");
+	});
+});
+
+describe("Pager", () => {
+	it("renders nothing for a single page", () => {
+		expect(mount(Pager, { props: { page: 1, pages: 1 } }).html()).toBe("<!--v-if-->");
+	});
+
+	it("is a named group of buttons that emits the page to go to", async () => {
+		const wrapper = mount(Pager, { props: { page: 2, pages: 5, label: "Results pages" } });
+		expect(wrapper.attributes("role")).toBe("group");
+		expect(wrapper.attributes("aria-label")).toBe("Results pages");
+		expect(wrapper.get(".fu-pager__label").text()).toBe("Page 2 of 5");
+		const [prev, next] = wrapper.findAll("button");
+		expect(prev.text()).toBe("← Previous");
+		expect(prev.get(".fu-pager__arrow").attributes("aria-hidden")).toBe("true");
+		await next.trigger("click");
+		await prev.trigger("click");
+		expect(wrapper.emitted("update:page")).toEqual([[3], [1]]);
+	});
+
+	it("marks the ends aria-disabled, keeping focus, and ignores clicks there", async () => {
+		const first = mount(Pager, { props: { page: 1, pages: 2 } });
+		const [prev, next] = first.findAll("button");
+		expect(prev.attributes("aria-disabled")).toBe("true");
+		expect(prev.attributes("disabled")).toBeUndefined();
+		expect(next.attributes("aria-disabled")).toBeUndefined();
+		await prev.trigger("click");
+		expect(first.emitted("update:page")).toBeUndefined();
+		const last = mount(Pager, { props: { page: 2, pages: 2 } });
+		await last.findAll("button")[1].trigger("click");
+		expect(last.emitted("update:page")).toBeUndefined();
+	});
+
+	it("renders links in a nav when given hrefs, leaving out the missing step", () => {
+		const wrapper = mount(Pager, { props: { page: 1, pages: 3, nextHref: "/blog/2/", nextText: "Older posts" } });
+		expect(wrapper.element.tagName).toBe("NAV");
+		expect(wrapper.find("button").exists()).toBe(false);
+		const links = wrapper.findAll("a");
+		expect(links).toHaveLength(1);
+		expect(links[0].attributes()).toMatchObject({ href: "/blog/2/", rel: "next" });
+		expect(links[0].text()).toBe("Older posts →");
 	});
 });

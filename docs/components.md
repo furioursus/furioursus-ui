@@ -11,7 +11,7 @@ They need the tokens and the theme switcher, then the component styles:
 ```js
 import "@furioursus/ui/tokens.css";      // or tailwind.css on a Tailwind site
 import "@furioursus/ui/vue/style.css";
-import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "@furioursus/ui/vue";
+import { Pager, PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "@furioursus/ui/vue";
 ```
 
 `theme.js` must still load in `<head>` (see [theming.md](theming.md)).
@@ -59,8 +59,8 @@ Import and register as usual. Nothing else to set up.
   a 1px nudge on press, bold with a 2px underline when selected, a 2px pink focus ring, 45% when
   disabled. The full state table the sites follow is in mtg-library-value-tracker's
   `docs/design.md` ("Interaction states").
-- `test/states.test.mjs` fails when a `:hover`, `:active`, `:disabled` or selected/pressed state in
-  `dist/vue/style.css` changes only colour properties. The components so far are borderless, after
+- `test/states.test.mjs` fails when a `:hover`, `:active`, `:disabled`, `aria-disabled` or
+  selected/pressed state in `dist/vue/style.css` changes only colour properties. The components so far are borderless, after
   furioursus.dev's design system (no boxes, shadows or lifts), so they use an underline, a thicker
   stroke, a 1px nudge, bolder weight or an outline. The pink offset shadow belongs to the tracker's
   and sorter's boxed buttons.
@@ -144,6 +144,43 @@ A numbered top-N list: rank, name with an optional subtitle, and a count.
 - **Footgun:** counts use `toLocaleString()`, which differs between the server (Node's locale) and
   a reader's browser. Render it statically, or Vue reports a hydration mismatch for readers whose
   locale formats numbers differently.
+
+## Pager
+
+Previous and next steps with "Page 2 of 5" between them. It replaces furioursus.dev's
+`Paginator.astro` and CardCollection's pagination bar, and the tracker's `BrowsePager.vue`.
+
+| Prop | Default | |
+| --- | --- | --- |
+| `page` | required | Current page, 1-based. Use `v-model:page`. |
+| `pages` | required | Number of pages. Nothing renders when it's 1 or less. |
+| `prevHref`, `nextHref` | none | Passing either renders links in a `<nav>`; otherwise buttons in a `role="group"`. |
+| `prevText`, `nextText` | `"Previous"`, `"Next"` | Visible text. The arrows are added after it and hidden from screen readers. |
+| `label` | `"Pages"` | Accessible name of the nav or group. |
+
+There are two modes:
+
+- **Links**, for pages the server builds. They need no `client:` directive. Astro's `page` maps
+  straight on:
+
+  ```astro
+  <Pager page={page.currentPage} pages={page.lastPage} prevHref={page.url.prev} nextHref={page.url.next} />
+  ```
+
+  At an end the missing link is left out, and the other step keeps its side.
+- **Buttons**, for lists paged in the browser. Each one emits `update:page` with the page to go to. At
+  an end the button is `aria-disabled`, not `disabled`, and ignores clicks.
+  - **Footgun:** keep it that way. A `disabled` button drops focus to `<body>` when Next lands on the
+    last page.
+  - It doesn't scroll. Under a long list, scroll back to the list's top in the handler, as the
+    tracker's `goPage(…, true)` does.
+
+Look (christopher chose furioursus.dev's borderless one over the tracker's boxed buttons):
+
+- A 2px pink underline on hover, with the arrow stepping 3px outward, and a 1px nudge down on press.
+- 45% opacity at an end, and a 2px pink focus ring.
+- The label wraps onto two lines when a phone is too narrow for all three parts, so the steps never
+  wrap.
 
 ## Adding a component
 
