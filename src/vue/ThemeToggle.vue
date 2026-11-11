@@ -92,7 +92,7 @@ onBeforeUnmount(() => document.removeEventListener("theme-changed", sync));
 			color 150ms cubic-bezier(0.4, 0, 0.2, 1),
 			transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 	}
-	/* Hover thickens the strokes as well as turning pink: a state is never colour alone (docs/components.md). */
+	/* Hover thickens the strokes as well as turning pink: a state is never color alone (docs/components.md). */
 	.fu-theme-toggle:hover {
 		color: var(--color-accent);
 	}

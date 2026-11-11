@@ -1,11 +1,8 @@
 # @furioursus/ui
 
-The shared look for furioursus sites: xerox paper, hot pink, acid green, gothic black. One set of
-design tokens, one theme switcher and a set of Vue components, used by furioursus.dev, the MTG
-tools, and whatever comes next.
+The shared look for furioursus sites: xerox paper, hot pink, acid green, gothic black. One set of design tokens, one theme switcher and a set of Vue components, used by furioursus.dev, the MTG tools, and whatever comes next.
 
-`src/tokens.json` is the source of truth for the tokens, generated into `dist/`; the components in
-`src/vue/` build into `dist/vue/`.
+`src/tokens.json` is the source of truth for the tokens, generated into `dist/`; the components in `src/vue/` build into `dist/vue/`.
 
 ## What's in it
 
@@ -17,7 +14,7 @@ tools, and whatever comes next.
 | `dist/theme.js` | The light/dark switcher. Sets `data-theme` before first paint and remembers an override. |
 | `dist/tokens.json` | Resolved values (with hex) for code that can't read CSS variables, like OG images and charts. |
 | `assets/` | The paper and dot-grid textures. |
-| `dist/vue/` | Vue 3 components (`ThemeToggle`, `PeriodTabs`, `SegmentedControl`, `RankedList`) and their `style.css`. See [docs/components.md](docs/components.md). |
+| `dist/vue/` | Vue 3 components (`ThemeToggle`, `PeriodTabs`, `SegmentedControl`, `RankedList`, `Pager`) and their `style.css`. See [docs/components.md](docs/components.md). |
 
 The full token list, with contrast ratios, is in [docs/reference.md](docs/reference.md).
 
@@ -37,9 +34,9 @@ Link the files directly. A pinned jsDelivr URL works from a page opened straight
 
 ```html
 <meta name="theme-color" content="#e8e3e2">
-<script src="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.1.0/dist/theme.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.1.0/dist/tokens.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.1.0/dist/base.css">
+<script src="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.5.1/dist/theme.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.5.1/dist/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/furioursus/furioursus-ui@v0.5.1/dist/base.css">
 ```
 
 ### Astro or Vite, with Tailwind v4
@@ -57,8 +54,7 @@ import "@furioursus/ui/tokens.css";
 import "@furioursus/ui/base.css"; // optional
 ```
 
-In every case `theme.js` has to load as a blocking script in `<head>`; see
-[docs/theming.md](docs/theming.md).
+In every case `theme.js` has to load as a blocking script in `<head>`; see [docs/theming.md](docs/theming.md).
 
 ### Vue components
 
@@ -67,26 +63,20 @@ import "@furioursus/ui/vue/style.css";
 import { PeriodTabs, RankedList, ThemeToggle } from "@furioursus/ui/vue";
 ```
 
-They need the tokens and `theme.js` too, and a site installs `vue` itself. Astro needs
-`@astrojs/vue` and a `client:` directive on anything interactive. Details, props and footguns:
-[docs/components.md](docs/components.md). `demo/components.html` shows them all.
+They need the tokens and `theme.js` too, and a site installs `vue` itself. Astro needs `@astrojs/vue` and a `client:` directive on anything interactive. Details, props and footguns: [docs/components.md](docs/components.md). `demo/components.html` shows them all.
 
 ### Fonts
 
 Fonts aren't included. Each site loads its own:
 
-- **MonoLisa** (`--font-mono`) is licensed. Self-host it per site. Without it, the stack falls back to
-  the system mono.
-- **Bricolage Grotesque** (`--font-display`) is OFL. Load it from Fontsource, Google Fonts, or local
-  files, and use the variable version so `"opsz" 60` applies.
+- **MonoLisa** (`--font-mono`) is licensed. Self-host it per site. Without it, the stack falls back to the system mono.
+- **Bricolage Grotesque** (`--font-display`) is OFL. Self-host it, from Fontsource (`@fontsource-variable/bricolage-grotesque`) or local files, never from Google's CDN, and use the variable version so `"opsz" 60` applies.
 
 ## Change a token
 
 1. Edit `src/tokens.json`.
 2. `npm run build` (tokens, then the Vue components)
-3. `npm test`. It fails if a text colour drops below 4.5:1 on the page, if the generated token files
-   are stale, or if a component's behaviour breaks.
-4. Commit `src/` and the regenerated files together, then tag a release (`v0.2.0`) so sites can pin it.
+3. `npm test`. It fails if a text color drops below 4.5:1 on the page, if the generated token files are stale, or if a component's behavior breaks.
+4. Commit `src/` and the regenerated files together, then tag a release (the next one is `v0.6.0` or `v0.5.2`) so sites can pin it.
 
-See [docs/tokens.md](docs/tokens.md) for naming, roles, and the map from each site's old variable
-names.
+See [docs/tokens.md](docs/tokens.md) for naming, roles, and the map from each site's old variable names.

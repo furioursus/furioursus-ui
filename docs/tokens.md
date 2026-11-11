@@ -1,13 +1,10 @@
 # Tokens
 
-How the tokens are named and organised, and how each existing site's variables map onto them. The
-full list with values and contrast is generated into [reference.md](reference.md).
+How the tokens are named and organized, and how each existing site's variables map onto them. The full list with values and contrast is generated into [reference.md](reference.md).
 
 ## Naming
 
-Every CSS variable is `--<group>-<name>`, and the groups are Tailwind v4's theme namespaces wherever
-one exists. So the same name works as a plain variable (`var(--color-accent)`) and as a Tailwind
-utility (`text-accent`) with no mapping layer.
+Every CSS variable is `--<group>-<name>`, and the groups are Tailwind v4's theme namespaces wherever one exists. So the same name works as a plain variable (`var(--color-accent)`) and as a Tailwind utility (`text-accent`) with no mapping layer.
 
 | Group | Example | Tailwind utility |
 | --- | --- | --- |
@@ -22,28 +19,22 @@ utility (`text-accent`) with no mapping layer.
 | `duration` | `--duration-theme` | none (plain variable) |
 | `texture` | `--texture-paper` | none (plain variable) |
 
-`container` uses `column` and `wide`, not `prose`, because Tailwind already has a built-in
-`max-w-prose`.
+`container` uses `column` and `wide`, not `prose`, because Tailwind already has a built-in `max-w-prose`.
 
-## Colour roles
+## Color roles
 
-Each colour has a `role` in `src/tokens.json`, and the tests use it:
+Each color has a `role` in `src/tokens.json`, and the tests use it:
 
 - **ground**: something text sits on (`page`, `surface`).
 - **text**: must reach 4.5:1 on the page in both themes. The build fails if one doesn't.
 - **decor**: rules, borders and fills that never carry text (`border`, `tint`, `hairline`).
-- **status**: the admonition colours. Contrast is reported but not enforced, because the light-mode
-  values fail today (1.5–3.0:1). They're Tailwind palette colours carried over from furioursus.dev
-  unchanged. Darken them for the light theme before using them for body-size text anywhere new.
+- **status**: the admonition colors. Contrast is reported but not enforced, because the light-mode values fail today (1.5–3.0:1). They're Tailwind palette colors carried over from furioursus.dev unchanged. Darken them for the light theme before using them for body-size text anywhere new.
 
-`border` and `tint` are derived from `ink` with `color-mix()`, so they follow the theme
-automatically and never need their own dark value.
+`border` and `tint` are derived from `ink` with `color-mix()`, so they follow the theme automatically and never need their own dark value.
 
 ## Adding a token
 
-Add it only when two places need it. A value one component uses belongs in that component. Give it
-a `description` that says where it's used, and for a colour, a `role`. Then `npm run build` and
-`npm test`.
+Add it only when two places need it. A value one component uses belongs in that component. Give it a `description` that says where it's used, and for a color, a `role`. Then `npm run build` and `npm test`.
 
 ## Migrating from the old names
 
@@ -66,8 +57,7 @@ a `description` that says where it's used, and for a colour, a `role`. Then `npm
 
 ### mtg-csv-sorter and mtg-library-value-tracker
 
-Their hex values are exact conversions of the furioursus.dev colours, so switching changes nothing
-visually except where noted.
+Their hex values are exact conversions of the furioursus.dev colors, so switching changes nothing visually except where noted.
 
 | Old | New | Notes |
 | --- | --- | --- |
@@ -81,5 +71,4 @@ visually except where noted.
 | `--ui-t` | `var(--duration-ui) ease-out` | |
 | `--paper`, `--dots` (tracker) | `--texture-paper`, `--texture-dots` | Drop the inlined copies. |
 
-The tracker's chart colours (`--up`, `--down`, `--seq-*`, `--grid`, `--axis`) stay in the tracker
-until a second project needs them.
+The tracker's chart colors (`--up`, `--down`, `--seq-*`, `--grid`, `--axis`) stay in the tracker until a second project needs them.

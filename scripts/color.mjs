@@ -1,4 +1,4 @@
-// Just enough colour maths for the build and tests: parse the formats tokens.json uses
+// Just enough color math for the build and tests: parse the formats tokens.json uses
 // (hex, hsl/hsla, oklch) into sRGB, then derive hex fallbacks and WCAG contrast.
 
 const clamp01 = (n) => Math.min(1, Math.max(0, n));
@@ -41,7 +41,7 @@ function parseOklch(str) {
 	return lin.map((c) => toGamma(clamp01(c)));
 }
 
-/** Parse a colour literal into sRGB channels 0–1, or null if it isn't a plain literal. */
+/** Parse a color literal into sRGB channels 0–1, or null if it isn't a plain literal. */
 export function parseColor(str) {
 	const s = str.trim().toLowerCase();
 	if (s.startsWith("#")) return parseHex(s);

@@ -4,9 +4,9 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { root } from "../scripts/build.mjs";
 
-// Every state must change shape as well as colour (christopher has protanopia): docs/components.md.
+// Every state must change shape as well as color (christopher has protanopia): docs/components.md.
 const STATE = /:hover|:active|:disabled|\[aria-(?:selected|pressed|disabled)="true"\]/;
-const COLOUR_ONLY = new Set([
+const COLOR_ONLY = new Set([
 	"color",
 	"background-color",
 	"border-color",
@@ -30,7 +30,7 @@ function stateKey(selector) {
 	return selector;
 }
 
-test("no state in the component styles is a colour change alone", () => {
+test("no state in the component styles is a color change alone", () => {
 	const css = readFileSync(join(root, "dist/vue/style.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 	const states = new Map();
 	for (const [, selectors, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
@@ -41,6 +41,6 @@ test("no state in the component styles is a colour change alone", () => {
 		}
 	}
 	assert.ok(states.size > 0, "found no state rules: has dist/vue/style.css moved?");
-	const colourOnly = [...states].filter(([, props]) => props.every((p) => COLOUR_ONLY.has(p))).map(([k]) => k);
-	assert.deepEqual(colourOnly, [], "add a shape change (underline, nudge, stroke, weight…) to these states");
+	const colorOnly = [...states].filter(([, props]) => props.every((p) => COLOR_ONLY.has(p))).map(([k]) => k);
+	assert.deepEqual(colorOnly, [], "add a shape change (underline, nudge, stroke, weight…) to these states");
 });

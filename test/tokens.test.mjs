@@ -8,7 +8,7 @@ import { parseColor } from "../scripts/color.mjs";
 const tokens = loadTokens();
 const THEMES = ["light", "dark"];
 
-test("every colour has either one value or a light and dark pair", () => {
+test("every color has either one value or a light and dark pair", () => {
 	for (const [name, t] of Object.entries(tokens.color)) {
 		const single = t.value !== undefined;
 		const pair = t.light !== undefined && t.dark !== undefined;
@@ -18,7 +18,7 @@ test("every colour has either one value or a light and dark pair", () => {
 	}
 });
 
-test("references resolve to colours the build can parse or CSS can compute", () => {
+test("references resolve to colors the build can parse or CSS can compute", () => {
 	for (const name of Object.keys(tokens.color)) {
 		for (const theme of THEMES) {
 			const value = resolveColor(tokens, name, theme);
@@ -27,7 +27,7 @@ test("references resolve to colours the build can parse or CSS can compute", () 
 	}
 });
 
-test("text colours reach 4.5:1 on the page in both themes", () => {
+test("text colors reach 4.5:1 on the page in both themes", () => {
 	for (const [name, t] of Object.entries(tokens.color)) {
 		if (t.role !== "text") continue;
 		for (const theme of THEMES) {
@@ -37,7 +37,7 @@ test("text colours reach 4.5:1 on the page in both themes", () => {
 	}
 });
 
-test("the page colours match the hex values the sites hard-code for theme-color", () => {
+test("the page colors match the hex values the sites hard-code for theme-color", () => {
 	const theme = readFileSync(join(root, "dist/theme.js"), "utf8");
 	assert.match(theme, /"light":"#e8e3e2"/);
 	assert.match(theme, /"dark":"#141414"/);
