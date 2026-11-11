@@ -30,7 +30,7 @@
 	<div id="app"></div>
 	<script type="module">
 		import { createApp, h, ref } from "vue";
-		import { PeriodTabs, RankedList, ThemeToggle } from "../dist/vue/index.js";
+		import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "../dist/vue/index.js";
 
 		const periods = [
 			{ value: "7day", label: "Last 7 days" },
@@ -56,6 +56,11 @@
 			setup() {
 				const a = ref("7day");
 				const b = ref("1m");
+				const c = ref("all");
+				const d = ref("price");
+				const filters = [{ value: "all", label: "All", count: 93 }, { value: "decide", label: "To decide", count: 4 },
+					{ value: "sell", label: "Selling", count: 71 }, { value: "hold", label: "Holding", count: 0, disabled: true }];
+				const modes = [{ value: "total", label: "Total value" }, { value: "price", label: "Price moves only" }];
 				return () => [
 					h("h1", "Components"),
 					h("p", { class: "note" }, "Built from dist/vue/. Run npm run build after changing a component."),
@@ -73,6 +78,17 @@
 						cell("Chart range",
 							h(PeriodTabs, { options: ranges, label: "Date range", modelValue: b.value, "onUpdate:modelValue": (v) => (b.value = v) }),
 							h("p", { class: "panel" }, `Showing ${b.value}`)),
+					]),
+
+					h("h2", "SegmentedControl"),
+					h("p", { class: "note" }, "Toggle buttons with aria-pressed: each one is a Tab stop. Same look as PeriodTabs, with counts and disabled options."),
+					h("div", { class: "compare" }, [
+						cell("Pull list filter",
+							h(SegmentedControl, { options: filters, label: "Show", modelValue: c.value, "onUpdate:modelValue": (v) => (c.value = v) }),
+							h("p", { class: "panel" }, `Showing ${c.value}`)),
+						cell("Chart line",
+							h(SegmentedControl, { options: modes, label: "Line", modelValue: d.value, "onUpdate:modelValue": (v) => (d.value = v) }),
+							h("p", { class: "panel" }, `Showing ${d.value}`)),
 					]),
 
 					h("h2", "RankedList"),

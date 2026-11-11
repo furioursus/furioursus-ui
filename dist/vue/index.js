@@ -1,7 +1,7 @@
-import { Fragment, computed, createBlock, createCommentVNode, createElementBlock, createElementVNode, createStaticVNode, createTextVNode, onBeforeUnmount, onMounted, openBlock, ref, renderList, resolveDynamicComponent, toDisplayString, withCtx } from "vue";
+import { Fragment, computed, createBlock, createCommentVNode, createElementBlock, createElementVNode, createStaticVNode, createTextVNode, mergeProps, onBeforeUnmount, onMounted, openBlock, ref, renderList, resolveDynamicComponent, toDisplayString, withCtx } from "vue";
 // src/vue/PeriodTabs.vue
-var _hoisted_1$2 = ["aria-label"];
-var _hoisted_2$2 = [
+var _hoisted_1$3 = ["aria-label"];
+var _hoisted_2$3 = [
 	"id",
 	"aria-controls",
 	"aria-selected",
@@ -80,18 +80,18 @@ var _sfc_main = {
 					tabindex: option.value === selected.value ? 0 : -1,
 					onClick: ($event) => select(index),
 					onKeydown: ($event) => onKeydown($event, index)
-				}, toDisplayString(option.label), 41, _hoisted_2$2);
-			}), 128))], 8, _hoisted_1$2);
+				}, toDisplayString(option.label), 41, _hoisted_2$3);
+			}), 128))], 8, _hoisted_1$3);
 		};
 	}
 };
 // src/vue/RankedList.vue
-var _hoisted_1$1 = { class: "fu-ranked" };
-var _hoisted_2$1 = {
+var _hoisted_1$2 = { class: "fu-ranked" };
+var _hoisted_2$2 = {
 	key: 0,
 	class: "fu-ranked__empty"
 };
-var _hoisted_3 = {
+var _hoisted_3$1 = {
 	key: 1,
 	class: "fu-ranked__list"
 };
@@ -137,10 +137,10 @@ var _sfc_main$1 = {
 	},
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$1, [(openBlock(), createBlock(resolveDynamicComponent(`h${__props.headingLevel}`), { class: "fu-ranked__title" }, {
+			return openBlock(), createElementBlock("div", _hoisted_1$2, [(openBlock(), createBlock(resolveDynamicComponent(`h${__props.headingLevel}`), { class: "fu-ranked__title" }, {
 				default: withCtx(() => [createTextVNode(toDisplayString(__props.title), 1)]),
 				_: 1
-			})), __props.items.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_2$1, toDisplayString(__props.emptyText), 1)) : (openBlock(), createElementBlock("ol", _hoisted_3, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.items, (item, index) => {
+			})), __props.items.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_2$2, toDisplayString(__props.emptyText), 1)) : (openBlock(), createElementBlock("ol", _hoisted_3$1, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.items, (item, index) => {
 				return openBlock(), createElementBlock("li", {
 					key: `${index}-${item.name}`,
 					class: "fu-ranked__row"
@@ -165,10 +165,67 @@ var _sfc_main$1 = {
 		};
 	}
 };
+// src/vue/SegmentedControl.vue
+var _hoisted_1$1 = ["aria-label"];
+var _hoisted_2$1 = [
+	"aria-pressed",
+	"disabled",
+	"title",
+	"onClick"
+];
+var _hoisted_3 = { class: "fu-seg__count" };
+var _sfc_main$2 = {
+	__name: "SegmentedControl",
+	props: {
+		/**
+		* The choices, in order: `{ value, label, count?, disabled?, title?, attrs? }`. `count` shows muted after
+		* the label ("All 12"); `attrs` go on that option's button (data attributes, say).
+		*/
+		options: {
+			type: Array,
+			required: true
+		},
+		/** The pressed option's `value` (use `v-model`). A value no option has presses none. */
+		modelValue: {
+			type: [
+				String,
+				Number,
+				Boolean
+			],
+			default: void 0
+		},
+		/** Accessible name of the group, e.g. "Show". */
+		label: {
+			type: String,
+			required: true
+		}
+	},
+	emits: ["update:modelValue"],
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				role: "group",
+				"aria-label": __props.label,
+				class: "fu-seg"
+			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (option) => {
+				return openBlock(), createElementBlock("button", mergeProps({
+					key: String(option.value),
+					type: "button",
+					class: "fu-seg__btn"
+				}, { ref_for: true }, option.attrs, {
+					"aria-pressed": String(option.value === __props.modelValue),
+					disabled: option.disabled || void 0,
+					title: option.title,
+					onClick: ($event) => _ctx.$emit("update:modelValue", option.value)
+				}), [createTextVNode(toDisplayString(option.label), 1), option.count != null ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [_cache[0] || (_cache[0] = createTextVNode(toDisplayString(" "), -1)), createElementVNode("span", _hoisted_3, toDisplayString(option.count), 1)], 64)) : createCommentVNode("", true)], 16, _hoisted_2$1);
+			}), 128))], 8, _hoisted_1$1);
+		};
+	}
+};
 // src/vue/ThemeToggle.vue
 var _hoisted_1 = ["aria-checked", "title"];
 var _hoisted_2 = { class: "fu-sr-only" };
-var _sfc_main$2 = {
+var _sfc_main$3 = {
 	__name: "ThemeToggle",
 	props: { 
 	/** Accessible name of the switch, read with its on/off state. */
@@ -198,4 +255,4 @@ label: {
 		};
 	}
 };
-export { _sfc_main as PeriodTabs, _sfc_main$1 as RankedList, _sfc_main$2 as ThemeToggle };
+export { _sfc_main as PeriodTabs, _sfc_main$1 as RankedList, _sfc_main$2 as SegmentedControl, _sfc_main$3 as ThemeToggle };
