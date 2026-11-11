@@ -1,6 +1,6 @@
 {
 	"name": "@furioursus/ui",
-	"version": "0.4.1",
+	"version": "0.5.0",
 	"description": "Design tokens, theme switching and Vue components shared across furioursus sites.",
 	"type": "module",
 	"repository": "github:furioursus/furioursus-ui",
