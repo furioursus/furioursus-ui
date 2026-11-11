@@ -37,7 +37,7 @@ Contrast is against `color-page` in the same theme. Text tokens must reach 4.5:1
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--text-2xs` | `0.8rem` | Captions, meta lines, tab labels. |
+| `--text-2xs` | `0.8rem` | Captions and meta lines. |
 | `--text-card-title` | `1.875rem / 2.25rem` | Card headings, pinned so the page-title scale never drags them along. |
 | `--text-title` | `2.25rem / 2.5rem` | Page title on phones. |
 | `--text-title-lg` | `3rem / 3.25rem` | Page title from 40rem up. |
@@ -54,8 +54,8 @@ Contrast is against `color-page` in the same theme. Text tokens must reach 4.5:1
 | Token | Value | Use |
 | --- | --- | --- |
 | `--spacing-tight-1` | `0.1rem` | A title pulled close to the line beside it. |
-| `--spacing-tight-4` | `0.4rem` | Compact list rows, tab-pill vertical padding. |
-| `--spacing-tight-6` | `0.6rem` | Tab-pill horizontal padding. |
+| `--spacing-tight-4` | `0.4rem` | Compact list rows. |
+| `--spacing-tight-6` | `0.6rem` | Boxed status padding, block axis (furioursus.dev's now-playing box). |
 | `--spacing-tight-8` | `0.8rem` | Boxed status padding. |
 | `--spacing-gutter` | `1rem` | Page side padding on phones. |
 | `--spacing-gutter-sm` | `2rem` | Page side padding from 40rem up. |
@@ -64,7 +64,7 @@ Contrast is against `color-page` in the same theme. Text tokens must reach 4.5:1
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--radius-xs` | `0.125rem` | Tabs, inline code. |
+| `--radius-xs` | `0.125rem` | Inline code. |
 | `--radius-sm` | `0.25rem` | Covers, code blocks, boxed status. |
 | `--radius-md` | `0.375rem` | Tinted cards, image thumbnails. |
 | `--radius-lg` | `0.5rem` | Badges. |
