@@ -39,10 +39,17 @@
 		grid-column: 3;
 		justify-self: end;
 }
-	/* inline-block keeps the underline off the arrow, so the arrow can move on its own. */
+	/* inline-block keeps the underline off the arrow, so the arrow can move on its own.
+	   FOOTGUN: space it with a margin, not a space character, or the hover underline runs under the gap. */
 .fu-pager__arrow {
 		display: inline-block;
 		transition: transform var(--duration-ui) ease-out;
+}
+.fu-pager__step--prev .fu-pager__arrow {
+		margin-inline-end: 0.4em;
+}
+.fu-pager__step--next .fu-pager__arrow {
+		margin-inline-start: 0.4em;
 }
 .fu-pager__step:focus-visible {
 		outline: 2px solid var(--color-accent);

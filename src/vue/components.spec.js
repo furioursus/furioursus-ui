@@ -199,7 +199,7 @@ describe("Pager", () => {
 		expect(wrapper.attributes("aria-label")).toBe("Results pages");
 		expect(wrapper.get(".fu-pager__label").text()).toBe("Page 2 of 5");
 		const [prev, next] = wrapper.findAll("button");
-		expect(prev.text()).toBe("← Previous");
+		expect(prev.text()).toBe("←Previous");
 		expect(prev.get(".fu-pager__arrow").attributes("aria-hidden")).toBe("true");
 		await next.trigger("click");
 		await prev.trigger("click");
@@ -226,6 +226,6 @@ describe("Pager", () => {
 		const links = wrapper.findAll("a");
 		expect(links).toHaveLength(1);
 		expect(links[0].attributes()).toMatchObject({ href: "/blog/2/", rel: "next" });
-		expect(links[0].text()).toBe("Older posts →");
+		expect(links[0].text()).toBe("Older posts→");
 	});
 });
