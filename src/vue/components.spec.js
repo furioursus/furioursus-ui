@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { createSSRApp, h } from "vue";
 import { renderToString } from "vue/server-renderer";
-import { PeriodTabs, RankedList, ThemeToggle } from "./index.js";
+import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "./index.js";
 
 const root = document.documentElement;
 afterEach(() => root.removeAttribute("data-theme"));
@@ -19,6 +19,7 @@ describe("server rendering", () => {
 			render: () => [
 				h(ThemeToggle),
 				h(PeriodTabs, { options: OPTIONS, label: "Range" }),
+				h(SegmentedControl, { options: OPTIONS, label: "Show", modelValue: "1month" }),
 				h(RankedList, { title: "Top", items: [{ name: "Blue Lines", count: 1204 }] }),
 			],
 		});
@@ -26,6 +27,8 @@ describe("server rendering", () => {
 		expect(html).toContain('role="switch"');
 		expect(html).toContain('aria-checked="false"');
 		expect(html).toContain('role="tablist"');
+		expect(html).toContain('role="group" aria-label="Show"');
+		expect(html).toContain('aria-pressed="true"');
 		expect(html).toContain("Blue Lines");
 	});
 });
@@ -99,6 +102,52 @@ describe("PeriodTabs", () => {
 
 	it("names the tab list", () => {
 		expect(mountTabs().get('[role="tablist"]').attributes("aria-label")).toBe("Range");
+	});
+});
+
+describe("SegmentedControl", () => {
+	const mountSeg = (props = {}) =>
+		mount(SegmentedControl, { props: { options: OPTIONS, label: "Show", modelValue: "7day", ...props }, attachTo: document.body });
+
+	it("is a named group of toggle buttons, each in the tab order", () => {
+		const wrapper = mountSeg();
+		expect(wrapper.get('[role="group"]').attributes("aria-label")).toBe("Show");
+		const buttons = wrapper.findAll("button");
+		expect(buttons.map((b) => b.attributes("aria-pressed"))).toEqual(["true", "false", "false"]);
+		expect(buttons.every((b) => b.attributes("tabindex") === undefined && b.attributes("type") === "button")).toBe(true);
+	});
+
+	it("emits every click, the pressed button's too", async () => {
+		const wrapper = mountSeg();
+		const buttons = wrapper.findAll("button");
+		await buttons[0].trigger("click");
+		await buttons[2].trigger("click");
+		expect(wrapper.emitted("update:modelValue")).toEqual([["7day"], ["overall"]]);
+	});
+
+	it("presses nothing for a value no option has, like a choice not made yet", () => {
+		expect(mountSeg({ modelValue: "decide" }).findAll('[aria-pressed="true"]')).toHaveLength(0);
+	});
+
+	it("shows counts, disables options and passes attributes through", async () => {
+		const options = [
+			{ value: "all", label: "All", count: 12, attrs: { "data-f": "all" } },
+			{ value: "none", label: "None", count: 0, disabled: true, title: "Nothing to show" },
+			{ value: 2, label: "Two" },
+		];
+		const wrapper = mountSeg({ options, modelValue: "all", id: "pseg" });
+		const [all, none, two] = wrapper.findAll("button");
+		expect(all.text()).toBe("All 12");
+		expect(all.get(".fu-seg__count").text()).toBe("12");
+		expect(all.attributes("data-f")).toBe("all");
+		expect(none.text()).toBe("None 0");
+		expect(none.attributes("disabled")).toBeDefined();
+		expect(none.attributes("title")).toBe("Nothing to show");
+		expect(two.find(".fu-seg__count").exists()).toBe(false);
+		expect(wrapper.get('[role="group"]').attributes("id")).toBe("pseg");
+		await none.trigger("click");
+		await two.trigger("click");
+		expect(wrapper.emitted("update:modelValue")).toEqual([[2]]);
 	});
 });
 
