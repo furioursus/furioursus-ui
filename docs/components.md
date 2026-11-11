@@ -155,7 +155,7 @@ Previous and next steps with "Page 2 of 5" between them. It replaces furioursus.
 | `page` | required | Current page, 1-based. Use `v-model:page`. |
 | `pages` | required | Number of pages. Nothing renders when it's 1 or less. |
 | `prevHref`, `nextHref` | none | Passing either renders links in a `<nav>`; otherwise buttons in a `role="group"`. |
-| `prevText`, `nextText` | `"Previous"`, `"Next"` | Visible text. The arrows are added after it and hidden from screen readers. |
+| `prevText`, `nextText` | `"Previous"`, `"Next"` | Visible text. The arrows are added beside it, spaced by a margin, and hidden from screen readers. |
 | `label` | `"Pages"` | Accessible name of the nav or group. |
 
 There are two modes:
