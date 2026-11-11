@@ -17,7 +17,7 @@ tools, and whatever comes next.
 | `dist/theme.js` | The light/dark switcher. Sets `data-theme` before first paint and remembers an override. |
 | `dist/tokens.json` | Resolved values (with hex) for code that can't read CSS variables, like OG images and charts. |
 | `assets/` | The paper and dot-grid textures. |
-| `dist/vue/` | Vue 3 components (`ThemeToggle`, `PeriodTabs`, `RankedList`) and their `style.css`. See [docs/components.md](docs/components.md). |
+| `dist/vue/` | Vue 3 components (`ThemeToggle`, `PeriodTabs`, `SegmentedControl`, `RankedList`) and their `style.css`. See [docs/components.md](docs/components.md). |
 
 The full token list, with contrast ratios, is in [docs/reference.md](docs/reference.md).
 

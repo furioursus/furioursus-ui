@@ -11,7 +11,7 @@ They need the tokens and the theme switcher, then the component styles:
 ```js
 import "@furioursus/ui/tokens.css";      // or tailwind.css on a Tailwind site
 import "@furioursus/ui/vue/style.css";
-import { PeriodTabs, RankedList, ThemeToggle } from "@furioursus/ui/vue";
+import { PeriodTabs, RankedList, SegmentedControl, ThemeToggle } from "@furioursus/ui/vue";
 ```
 
 `theme.js` must still load in `<head>` (see [theming.md](theming.md)).
@@ -56,6 +56,8 @@ Import and register as usual. Nothing else to set up.
 - One look per component. When projects disagreed, the look was chosen once (2026-11-10) and the
   other removed: ThemeToggle uses furioursus.dev's sun/moon, PeriodTabs the tracker's underlined
   segments. Don't reintroduce a `look`/`variant` prop to bring the other back; change the one look.
+  SegmentedControl shares PeriodTabs' look (`src/vue/segments.css`), chosen over Go-Shintai's
+  bordered filter strip (2026-11-11); its per-row sell/hold/bulk/keep toggle stays in the tracker.
 
 ## ThemeToggle
 
@@ -89,7 +91,29 @@ the selected tab is in the Tab order.
 - When the tabs switch panels, pass `idPrefix`, give each panel `id="${idPrefix}-panel-${value}"`,
   `role="tabpanel"` and `aria-labelledby="${idPrefix}-tab-${value}"`, and hide the others.
 - When they only filter one view (a chart's date range), leave `idPrefix` off.
-- Look: muted text, a 1px underline on hover, bold pink with a 2px pink underline when selected.
+- Look: muted text, a 1px underline on hover, a 1px nudge down on press, bold pink with a 2px pink
+  underline when selected. The styles are `src/vue/segments.css`, shared with `SegmentedControl`.
+
+## SegmentedControl
+
+A row of toggle buttons where one is pressed: filters and settings that change one view (a chart's
+line, a list's filter). Each button is its own Tab stop with `aria-pressed`, the toggle-button
+pattern; reach for `PeriodTabs` instead when the choice switches panels.
+
+| Prop | Default | |
+| --- | --- | --- |
+| `options` | required | `[{ value, label, count?, disabled?, title?, attrs? }]`, in order. `count` shows muted after the label; `attrs` go on that button. |
+| `modelValue` | none | The pressed `value`. Use `v-model`. |
+| `label` | required | Accessible name of the group, e.g. "Show". |
+
+- Every click emits, the pressed button's too, as with `PeriodTabs`: a handler can treat it as
+  "go there" (the lookup's Search tab leaves a card's detail that way). Keep handlers idempotent.
+- A `modelValue` no option has presses none, for "not chosen yet". Unlike `PeriodTabs`, it doesn't
+  fall back to the first option.
+- Other attributes (`id`, `class`) go on the group.
+- Look: `PeriodTabs`' (`src/vue/segments.css`), plus a 1px nudge down on press and 45% opacity
+  with a not-allowed cursor when disabled.
+- In Astro it needs a `client:` directive to respond, like `PeriodTabs`.
 
 ## RankedList
 

@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import "./segments.css";
 
 const props = defineProps({
 	/** The choices, in order: `{ value, label }`. */
@@ -61,48 +62,3 @@ const onKeydown = (event, index) => {
 		</button>
 	</div>
 </template>
-
-<style>
-@layer components {
-	/* Plain text segments: bold with a 2px pink underline when selected, a 1px underline on hover. */
-	.fu-tabs {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-	}
-	.fu-tabs__tab {
-		appearance: none;
-		margin: 0;
-		font: inherit;
-		cursor: pointer;
-		padding: 6px 0 5px;
-		font-size: 0.8125rem;
-		color: var(--color-muted);
-		background: transparent;
-		border: 0;
-		border-radius: 0;
-		transition:
-			color var(--duration-ui) ease-out,
-			box-shadow var(--duration-ui) ease-out;
-	}
-	.fu-tabs__tab:hover {
-		color: var(--color-highlight);
-		box-shadow: inset 0 -1px 0 currentColor;
-	}
-	.fu-tabs__tab[aria-selected="true"] {
-		color: var(--color-accent);
-		font-weight: 700;
-		box-shadow: inset 0 -2px 0 var(--color-accent);
-	}
-	.fu-tabs__tab:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.fu-tabs__tab {
-			transition: none;
-		}
-	}
-}
-</style>

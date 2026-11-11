@@ -1,12 +1,14 @@
-
+/* The one segment look, shared by PeriodTabs (tabs) and SegmentedControl (toggle buttons): plain muted
+   text, a 1px underline on hover, bold pink with a 2px pink underline when selected. docs/components.md */
 @layer components {
-	/* Plain text segments: bold with a 2px pink underline when selected, a 1px underline on hover. */
-.fu-tabs {
+	.fu-tabs,
+	.fu-seg {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
-}
-.fu-tabs__tab {
+	}
+	.fu-tabs__tab,
+	.fu-seg__btn {
 		appearance: none;
 		margin: 0;
 		font: inherit;
@@ -19,26 +21,44 @@
 		border-radius: 0;
 		transition:
 			color var(--duration-ui) ease-out,
-			box-shadow var(--duration-ui) ease-out;
-}
-.fu-tabs__tab:hover {
+			box-shadow var(--duration-ui) ease-out,
+			transform var(--duration-ui) ease-out;
+	}
+	/* FOOTGUN: :where() keeps hover at the selected rule's specificity, so a selected segment keeps its 2px line. */
+	.fu-tabs__tab:hover,
+	.fu-seg__btn:where(:hover:not(:disabled)) {
 		color: var(--color-highlight);
 		box-shadow: inset 0 -1px 0 currentColor;
-}
-.fu-tabs__tab[aria-selected="true"] {
+	}
+	.fu-tabs__tab:active,
+	.fu-seg__btn:where(:active:not(:disabled)) {
+		transform: translateY(1px);
+	}
+	.fu-tabs__tab[aria-selected="true"],
+	.fu-seg__btn[aria-pressed="true"] {
 		color: var(--color-accent);
 		font-weight: 700;
 		box-shadow: inset 0 -2px 0 var(--color-accent);
-}
-.fu-tabs__tab:focus-visible {
+	}
+	.fu-tabs__tab:focus-visible,
+	.fu-seg__btn:focus-visible {
 		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
-}
-@media (prefers-reduced-motion: reduce) {
-.fu-tabs__tab {
+	}
+	.fu-seg__btn:disabled {
+		cursor: not-allowed;
+		opacity: 0.45;
+	}
+	.fu-seg__count {
+		color: var(--color-muted);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.fu-tabs__tab,
+		.fu-seg__btn {
 			transition: none;
-}
-}
+		}
+	}
 }
 
 @layer components {
